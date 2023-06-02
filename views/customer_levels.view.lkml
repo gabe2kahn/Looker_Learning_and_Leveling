@@ -42,7 +42,7 @@ view: customer_levels {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."LEVEL_COMPLETION_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."LEVEL_COMPLETION_TS" ;;
   }
 
   dimension: level_id {
@@ -61,7 +61,7 @@ view: customer_levels {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."LEVEL_LAST_UPDATED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."LEVEL_LAST_UPDATED_TS" ;;
   }
 
   dimension: level_name {
@@ -80,7 +80,7 @@ view: customer_levels {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."LEVEL_STARTED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."LEVEL_STARTED_TS" ;;
   }
 
   dimension: level_version {
@@ -95,6 +95,7 @@ view: customer_levels {
 
   dimension: user_level_id {
     type: string
+    primary_key: yes
     sql: ${TABLE}."USER_LEVEL_ID" ;;
   }
 

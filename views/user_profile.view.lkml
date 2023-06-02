@@ -18,7 +18,7 @@ view: user_profile {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."APPLICATION_APPROVAL_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."APPLICATION_APPROVAL_TS";;
   }
 
   dimension: approval_test_ind {
@@ -42,7 +42,7 @@ view: user_profile {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."CARD_CREATION_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."CARD_CREATION_TS" ;;
   }
 
   dimension_group: card_update_ts {
@@ -56,7 +56,7 @@ view: user_profile {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."CARD_UPDATE_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."CARD_UPDATE_TS" ;;
   }
 
   dimension: current_base_interest_rate {
@@ -105,7 +105,7 @@ view: user_profile {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."LAST_PHYSICAL_CARD_SHIP_DATE" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."LAST_PHYSICAL_CARD_SHIP_DATE" ;;
   }
 
   dimension_group: last_update_ts {
@@ -168,11 +168,12 @@ view: user_profile {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."USER_CREATION_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."USER_CREATION_TS" ;;
   }
 
   dimension: user_id {
     type: string
+    primary_key: yes
     sql: ${TABLE}."USER_ID" ;;
   }
 

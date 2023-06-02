@@ -13,7 +13,7 @@ view: customer_activities {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."ACTIVITY_COMPLETION_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."ACTIVITY_COMPLETION_TS" ;;
   }
 
   dimension: activity_est_time_duration {
@@ -32,7 +32,7 @@ view: customer_activities {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."ACTIVITY_LAST_UPDATED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."ACTIVITY_LAST_UPDATED_TS" ;;
   }
 
   dimension: activity_name {
@@ -66,7 +66,7 @@ view: customer_activities {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."ACTIVITY_UNLOCKED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."ACTIVITY_UNLOCKED_TS" ;;
   }
 
   dimension: customer_learning_system_id {
@@ -110,6 +110,7 @@ view: customer_activities {
 
   dimension: user_activity_id {
     type: string
+    primary_key: yes
     sql: ${TABLE}."USER_ACTIVITY_ID" ;;
   }
 

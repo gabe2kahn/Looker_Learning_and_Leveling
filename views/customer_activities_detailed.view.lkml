@@ -13,7 +13,7 @@ view: customer_activities_detailed {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."ACTIVITY_LAST_UPDATED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."ACTIVITY_LAST_UPDATED_TS" ;;
   }
 
   dimension: activity_name {
@@ -66,7 +66,7 @@ view: customer_activities_detailed {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."SCREEN_COMPLETED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."SCREEN_COMPLETED_TS" ;;
   }
 
   dimension: screen_duration_seconds {
@@ -90,7 +90,7 @@ view: customer_activities_detailed {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."SCREEN_STARTED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."SCREEN_STARTED_TS" ;;
   }
 
   dimension: screen_type {
@@ -106,6 +106,12 @@ view: customer_activities_detailed {
   dimension: user_activity_id {
     type: string
     sql: ${TABLE}."USER_ACTIVITY_ID" ;;
+  }
+
+  dimension: user_screen_id {
+    type: string
+    primary_key: yes
+    sql: ${TABLE}."USER_SCREEN_ID" ;;
   }
 
   dimension: user_id {
