@@ -16,6 +16,20 @@ view: customer_activities {
     sql: ${TABLE}."ACTIVITY_COMPLETION_TS" ;;
   }
 
+  dimension_group: activity_created_ts {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."ACTIVITY_CREATED_TS" ;;
+  }
+
   dimension: activity_est_time_duration {
     type: number
     sql: ${TABLE}."ACTIVITY_EST_TIME_DURATION" ;;
@@ -48,6 +62,7 @@ view: customer_activities {
   dimension: activity_reward {
     type: number
     sql: ${TABLE}."ACTIVITY_REWARD" ;;
+    value_format_name: usd
   }
 
   dimension: activity_set_name {
@@ -55,7 +70,7 @@ view: customer_activities {
     sql: ${TABLE}."ACTIVITY_SET_NAME" ;;
   }
 
-  dimension_group: activity_unlocked_ts {
+  dimension_group: activity_started_ts {
     type: time
     timeframes: [
       raw,
@@ -66,7 +81,7 @@ view: customer_activities {
       quarter,
       year
     ]
-    sql: ${TABLE}."ACTIVITY_UNLOCKED_TS" ;;
+    sql: ${TABLE}."ACTIVITY_STARTED_TS" ;;
   }
 
   dimension: customer_learning_system_id {
@@ -124,8 +139,26 @@ view: customer_activities {
     sql: ${TABLE}."USER_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [activity_set_name, level_name, activity_name]
+  measure: distinct_users {
+    type: count_distinct
+    sql: ${user_profile.user_id} ;;
+  }
+
+  measure: activity_completion_rate {
+    type: number
+    sql: COUNT(DISTINCT CASE WHEN ${activity_completion_ts_date} IS NOT NULL THEN ${user_activity_id})/
+    COUNT(DISTINCT ${user_activity_id});;
+    value_format_name: percent_2
+  }
+
+  measure: average_activity_completion_seconds {
+    type: average
+    sql: DATEDIFF(SECONDS, ${activity_started_ts_raw},${activity_completion_ts_raw} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: median_activity_completion_seconds{
+    type: number
+    sql: median(DATEDIFF(SECONDS, ${activity_started_ts_raw},${activity_completion_ts_raw} ;;
   }
 }

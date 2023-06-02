@@ -119,8 +119,27 @@ view: customer_activities_detailed {
     sql: ${TABLE}."USER_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [screen_name, activity_name]
+  measure: distinct_users {
+    type: count_distinct
+    sql: ${user_profile.user_id} ;;
   }
+
+  measure: average_seconds_per_screen {
+    type: average
+    sql: ${screen_duration_seconds} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: median_seconds_per_screen {
+    type: number
+    sql: median(${screen_duration_seconds}) ;;
+  }
+
+  measure: correct_answer_rate {
+    type: number
+    sql: COUNT(DISTINCT CASE WHEN customer_answer_correct_ind = 'Y' THEN ${user_screen_id}/
+    COUNT(DISTINCT CASE WHEN ${screen_type} = 'question' THEN ${user_screen_id});;
+    value_format_name: percent_2
+  }
+
 }

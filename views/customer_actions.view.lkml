@@ -43,9 +43,10 @@ view: customer_actions {
   dimension: action_reward {
     type: number
     sql: ${TABLE}."ACTION_REWARD" ;;
+    value_format_name: usd
   }
 
-  dimension_group: action_unlocked_ts {
+  dimension_group: action_created_ts {
     type: time
     timeframes: [
       raw,
@@ -56,7 +57,7 @@ view: customer_actions {
       quarter,
       year
     ]
-    sql: ${TABLE}."ACTION_UNLOCKED_TS" ;;
+    sql: ${TABLE}."ACTION_CREATED_TS" ;;
   }
 
   dimension: customer_learning_system_id {
@@ -104,8 +105,15 @@ view: customer_actions {
     sql: ${TABLE}."USER_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [level_name, action_name]
+  measure: distinct_users {
+    type: count_distinct
+    sql: ${user_profile.user_id} ;;
+  }
+
+  measure: action_completion_rate {
+    type: number
+    sql: COUNT(DISTINCT CASE WHEN ${action_completion_ts_date}} IS NOT NULL THEN ${user_action_id})/
+      COUNT(DISTINCT ${user_action_id});;
+    value_format_name: percent_2
   }
 }

@@ -5,6 +5,7 @@ view: customer_levels {
   dimension: apr_decrease_reward {
     type: number
     sql: ${TABLE}."APR_DECREASE_REWARD" ;;
+    value_format_name: percent_2
   }
 
   dimension: customer_learning_system_id {
@@ -99,8 +100,20 @@ view: customer_levels {
     sql: ${TABLE}."USER_LEVEL_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [level_name]
+  measure: distinct_users {
+    type: count_distinct
+    sql: ${user_profile.user_id} ;;
   }
+
+  measure: average_time_to_level_up{
+    type: average
+    sql: DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: median_time_to_level_up{
+    type: number
+    sql: median(DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date}) ;;
+  }
+
 }
