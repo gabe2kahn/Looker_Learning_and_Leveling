@@ -146,7 +146,7 @@ view: customer_activities {
 
   measure: activity_completion_rate {
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${activity_completion_ts_date} IS NOT NULL THEN ${user_activity_id})/
+    sql: COUNT(DISTINCT CASE WHEN ${activity_completion_ts_date} IS NOT NULL THEN ${user_activity_id} END)/
     COUNT(DISTINCT ${user_activity_id});;
     value_format_name: percent_2
   }
