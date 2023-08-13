@@ -68,6 +68,13 @@ explore: customer_levels {
     relationship: many_to_many
   }
 
+  join: customer_activities_detailed {
+    type: inner
+    sql_on: ${customer_activities.user_id} = ${customer_activities_detailed.user_id}
+      AND ${customer_activities.user_activity_id} = ${customer_activities_detailed.user_activity_id};;
+    relationship: many_to_many
+  }
+
   always_filter: {
     filters: [user_profile.testing_stage: "Rollout"]
   }
