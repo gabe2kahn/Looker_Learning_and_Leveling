@@ -100,7 +100,7 @@ view: customer_levels {
     sql: ${TABLE}."USER_LEVEL_ID" ;;
   }
 
-  measure: distinct_users {
+  measure: users {
     type: count_distinct
     sql: ${user_profile.user_id} ;;
   }
@@ -114,6 +114,42 @@ view: customer_levels {
   measure: median_time_to_level_up{
     type: number
     sql: median(DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date}) ;;
+  }
+
+  measure: users_leveled_up_within_30d {
+    type: count_distinct
+    sql: CASE WHEN ${level_completion_ts_date} between ${level_started_ts_date}
+        AND DATEADD(days,30,${level_started_ts_date}) THEN ${user_id} END ;;
+  }
+
+  measure: percent_users_leveled_up_within_30d {
+    type: number
+    sql: ${users_leveled_up_within_30d} / ${users} ;;
+    value_format_name: percent_1
+  }
+
+  measure: users_leveled_up_within_60d {
+    type: count_distinct
+    sql: CASE WHEN ${level_completion_ts_date} between ${level_started_ts_date}
+      AND DATEADD(days,30,${level_started_ts_date}) THEN ${user_id} END ;;
+  }
+
+  measure: percent_users_leveled_up_within_60d {
+    type: number
+    sql: ${users_leveled_up_within_60d} / ${users} ;;
+    value_format_name: percent_1
+  }
+
+  measure: users_leveled_up_within_90d {
+    type: count_distinct
+    sql: CASE WHEN ${level_completion_ts_date} between ${level_started_ts_date}
+      AND DATEADD(days,90,${level_started_ts_date}) THEN ${user_id} END ;;
+  }
+
+  measure: percent_users_leveled_up_within_90d {
+    type: number
+    sql: ${users_leveled_up_within_90d} / ${users} ;;
+    value_format_name: percent_1
   }
 
 }
