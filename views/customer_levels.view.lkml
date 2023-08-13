@@ -131,7 +131,7 @@ view: customer_levels {
   measure: users_leveled_up_within_60d {
     type: count_distinct
     sql: CASE WHEN ${level_completion_ts_date} between ${level_started_ts_date}
-      AND DATEADD(days,30,${level_started_ts_date}) THEN ${user_id} END ;;
+      AND DATEADD(days,60,${level_started_ts_date}) THEN ${user_id} END ;;
   }
 
   measure: percent_users_leveled_up_within_60d {
