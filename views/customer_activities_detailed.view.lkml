@@ -138,7 +138,7 @@ view: customer_activities_detailed {
   measure: correct_answer_rate {
     type: number
     sql: COUNT(DISTINCT CASE WHEN customer_answer_correct_ind = 'Y' THEN ${user_screen_id} END)/
-    COUNT(DISTINCT CASE WHEN ${screen_type} = 'question' THEN ${user_screen_id} END);;
+    COUNT(DISTINCT CASE WHEN ${screen_type} = 'question' AND ${customer_answer_correct_ind} IS NOT NULL THEN ${user_screen_id} END);;
     value_format_name: percent_2
   }
 
