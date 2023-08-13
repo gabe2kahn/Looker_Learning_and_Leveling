@@ -107,13 +107,13 @@ view: customer_levels {
 
   measure: average_time_to_level_up{
     type: average
-    sql: DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date} ;;
+    sql: DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date}) ;;
     value_format_name: decimal_2
   }
 
   measure: median_time_to_level_up{
     type: number
-    sql: median(DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date}) ;;
+    sql: median(DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date})) ;;
   }
 
   measure: users_leveled_up_within_30d {
