@@ -124,7 +124,7 @@ view: customer_levels {
 
   measure: percent_users_leveled_up_within_30d {
     type: number
-    sql: ${users_leveled_up_within_30d} / ${users} ;;
+    sql: ${users_leveled_up_within_30d} / NULLIF(${users},0) ;;
     value_format_name: percent_1
   }
 
@@ -136,7 +136,7 @@ view: customer_levels {
 
   measure: percent_users_leveled_up_within_60d {
     type: number
-    sql: ${users_leveled_up_within_60d} / ${users} ;;
+    sql: ${users_leveled_up_within_60d} / NULLIF(${users},0) ;;
     value_format_name: percent_1
   }
 
@@ -148,7 +148,7 @@ view: customer_levels {
 
   measure: percent_users_leveled_up_within_90d {
     type: number
-    sql: ${users_leveled_up_within_90d} / ${users} ;;
+    sql: ${users_leveled_up_within_90d} / NULLIF(${users},0) ;;
     value_format_name: percent_1
   }
 
