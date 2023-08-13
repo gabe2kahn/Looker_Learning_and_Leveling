@@ -159,6 +159,6 @@ view: customer_activities {
 
   measure: median_activity_completion_seconds{
     type: number
-    sql: median(DATEDIFF(SECONDS, ${activity_started_ts_raw},${activity_completion_ts_raw}) ;;
+    sql: median(DATEDIFF(SECONDS, ${activity_started_ts_raw},${activity_completion_ts_raw})) ;;
   }
 }
