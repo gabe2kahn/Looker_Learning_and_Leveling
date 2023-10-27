@@ -116,4 +116,16 @@ view: customer_actions {
       COUNT(DISTINCT ${user_action_id});;
     value_format_name: percent_2
   }
+
+  measure: action_completion_rate_within_30d {
+    type: count_distinct
+    sql: CASE WHEN ${action_completion_ts_date} between ${customer_levels.level_started_ts_date}
+      AND DATEADD(days,30,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
+  }
+
+  measure: action_completion_rate_within_60d {
+    type: count_distinct
+    sql: CASE WHEN ${action_completion_ts_date} between ${customer_levels.level_started_ts_date}
+      AND DATEADD(days,60,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
+  }
 }
