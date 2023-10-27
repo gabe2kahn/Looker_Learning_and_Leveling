@@ -162,16 +162,28 @@ view: customer_activities {
     sql: median(DATEDIFF(SECONDS, ${activity_started_ts_raw},${activity_completion_ts_raw})) ;;
   }
 
-  measure: activity_completion_rate_within_30d {
+  measure: activies_completed_within_30d {
     type: count_distinct
     sql: CASE WHEN ${activity_completion_ts_date} between ${customer_levels.level_started_ts_date}
       AND DATEADD(days,30,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
   }
 
-  measure: activity_completion_rate_within_60d {
+  measure: activies_completed_within_60d {
     type: count_distinct
     sql: CASE WHEN ${activity_completion_ts_date} between ${customer_levels.level_started_ts_date}
       AND DATEADD(days,60,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
+  }
+
+  measure: activies_completion_rate_30d {
+    type: number
+    sql: ${activies_completed_within_30d} / COUNT(DISTINCT ${user_activity_id});;
+    value_format_name: percent_1
+  }
+
+  measure: activies_completion_rate_60d {
+    type: number
+    sql: ${activies_completed_within_60d} / COUNT(DISTINCT ${user_activity_id});;
+    value_format_name: percent_1
   }
 
 }
