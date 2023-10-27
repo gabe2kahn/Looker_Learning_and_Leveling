@@ -162,6 +162,11 @@ view: customer_activities {
     sql: median(DATEDIFF(SECONDS, ${activity_started_ts_raw},${activity_completion_ts_raw})) ;;
   }
 
+  measure: max_activity_available_days {
+    type: max
+    sql: ${days_available_after_level_up} ;;
+  }
+
   measure: activies_completed_within_30d {
     type: count_distinct
     sql: CASE WHEN ${activity_completion_ts_date} between ${customer_levels.level_started_ts_date}
