@@ -100,3 +100,11 @@ explore: customer_levels {
     filters: [user_profile.testing_stage: "Rollout"]
   }
 }
+
+explore: financial_health_score {
+  join: user_profile {
+    type: inner
+    sql_on: ${financial_health_score.user_id} = ${user_profile.user_id} ;;
+    relationship: many_to_one
+  }
+}
