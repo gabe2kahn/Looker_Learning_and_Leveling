@@ -21,6 +21,10 @@ view: financial_health_score {
     sql: ${TABLE}."DEBT_MANAGEABILITY_SCORE" ;;
   }
 
+  dimension: final_survey_complete_ind {
+    type: string
+    sql: ${TABLE}."FINAL_SURVEY_COMPLETE_IND" ;;
+  }
 
   dimension: financial_goal_confidence {
     type: string
@@ -37,7 +41,6 @@ view: financial_health_score {
     sql: ${TABLE}."FINANCIAL_HEALTH_SCORE" ;;
     value_format_name: decimal_1
   }
-
 
 
   dimension: financial_planning {
