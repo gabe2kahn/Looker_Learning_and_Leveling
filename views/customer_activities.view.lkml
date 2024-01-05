@@ -179,6 +179,12 @@ view: customer_activities {
       AND DATEADD(days,60,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
   }
 
+  measure: activies_completed_within_90d {
+    type: count_distinct
+    sql: CASE WHEN ${activity_completion_ts_date} between ${customer_levels.level_started_ts_date}
+      AND DATEADD(days,90,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
+  }
+
   measure: activies_completion_rate_30d {
     type: number
     sql: ${activies_completed_within_30d} / COUNT(DISTINCT ${user_activity_id});;
@@ -188,6 +194,12 @@ view: customer_activities {
   measure: activies_completion_rate_60d {
     type: number
     sql: ${activies_completed_within_60d} / COUNT(DISTINCT ${user_activity_id});;
+    value_format_name: percent_1
+  }
+
+  measure: activies_completion_rate_90d {
+    type: number
+    sql: ${activies_completed_within_90d} / COUNT(DISTINCT ${user_activity_id});;
     value_format_name: percent_1
   }
 
