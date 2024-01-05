@@ -32,7 +32,15 @@ view: customer_actions {
 
   dimension: action_name {
     type: string
-    sql: ${TABLE}."ACTION_NAME" ;;
+    sql: CASE
+      WHEN ${TABLE}."ACTION_NAME" IN ('Make 2nd consecutive, on-time, minimum payment',
+        'Make 2nd consecutive, on-time, minimum statement payment',
+        'Silver Streak: 2 on-time, minimum statement payments') THEN 'Make 2nd consecutive, on-time, minimum payment'
+      WHEN ${TABLE}."ACTION_NAME" IN ('Pay $100 off your balance','Pay off $100') THEN 'Pay $100 off your balance'
+      WHEN ${TABLE}."ACTION_NAME" IN ('Make 3rd consecutive, on-time, minimum statement payment',
+        'Make 3rd consecutive, on-time, minimum payment') THEN 'Make 3rd consecutive, on-time, minimum payment'
+      ELSE ${TABLE}."ACTION_NAME"
+      END ;;
   }
 
   dimension: action_required_ind {
