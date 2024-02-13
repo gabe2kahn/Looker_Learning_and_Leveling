@@ -177,8 +177,8 @@ view: user_profile {
     sql: ${TABLE}."USER_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: []
+  measure: users {
+    type: count_distinct
+    sql: ${user_id} ;;
   }
 }
