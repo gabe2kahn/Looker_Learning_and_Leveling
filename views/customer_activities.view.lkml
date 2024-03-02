@@ -94,6 +94,11 @@ view: customer_activities {
     sql: ${TABLE}."DAYS_AVAILABLE_AFTER_LEVEL_UP" ;;
   }
 
+  dimension: grow_version {
+    type: number
+    sql: ${TABLE}."GROW_VERSION" ;;
+  }
+
   dimension_group: last_update_ts {
     type: time
     timeframes: [

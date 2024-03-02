@@ -31,6 +31,11 @@ view: customer_activities_detailed {
     sql: ${TABLE}."CUSTOMER_ANSWER_CORRECT_IND" ;;
   }
 
+  dimension: grow_version {
+    type: number
+    sql: ${TABLE}."GROW_VERSION" ;;
+  }
+
   dimension_group: last_update_ts {
     type: time
     timeframes: [

@@ -18,6 +18,11 @@ view: customer_levels {
     sql: ${TABLE}."FREE_MONTHS_REWARD" ;;
   }
 
+  dimension: grow_version {
+    type: number
+    sql: ${TABLE}."GROW_VERSION" ;;
+  }
+
   dimension_group: last_update_ts {
     type: time
     timeframes: [

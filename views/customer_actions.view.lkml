@@ -73,6 +73,11 @@ view: customer_actions {
     sql: ${TABLE}."CUSTOMER_LEARNING_SYSTEM_ID" ;;
   }
 
+  dimension: grow_version {
+    type: number
+    sql: ${TABLE}."GROW_VERSION" ;;
+  }
+
   dimension_group: last_update_ts {
     type: time
     timeframes: [
