@@ -181,4 +181,10 @@ view: user_profile {
     type: count_distinct
     sql: ${user_id} ;;
   }
+
+  measure: max_credit_limit {
+    type: max
+    sql: ${current_credit_limit} ;;
+    value_format_name: usd
+  }
 }
