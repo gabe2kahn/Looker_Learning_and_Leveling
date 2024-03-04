@@ -158,8 +158,8 @@ view: customer_levels {
   }
 
   measure: total_rewards {
-    type: sum
-    sql: ${customer_actions.action_reward} + ${customer_activities.activity_reward} ;;
+    type: number
+    sql: ${customer_actions.total_action_rewards} + ${customer_activities.total_activity_rewards} ;;
     value_format_name: usd_0
   }
 }

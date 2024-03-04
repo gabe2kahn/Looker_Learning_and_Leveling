@@ -135,7 +135,7 @@ view: customer_actions {
 
   measure: total_action_rewards {
     type: sum
-    sql: ${action_reward} ;;
+    sql: CASE WHEN ${action_completion_ts_date} IS NOT NULL THEN ${action_reward} END ;;
     value_format_name: usd_0
   }
 
