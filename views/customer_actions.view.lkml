@@ -136,6 +136,7 @@ view: customer_actions {
   measure: total_action_rewards {
     type: sum
     sql: ${action_reward} ;;
+    value_format_name: usd_0
   }
 
   measure: action_completion_rate {

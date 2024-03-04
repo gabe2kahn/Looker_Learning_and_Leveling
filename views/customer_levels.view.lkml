@@ -160,5 +160,6 @@ view: customer_levels {
   measure: total_rewards {
     type: sum
     sql: ${customer_actions.action_reward} + ${customer_activities.activity_reward} ;;
+    value_format_name: usd_0
   }
 }
