@@ -157,4 +157,8 @@ view: customer_levels {
     value_format_name: percent_1
   }
 
+  measure: total_rewards {
+    type: sum
+    sql: ${customer_actions.action_reward} + ${customer_activities.activity_reward} ;;
+  }
 }

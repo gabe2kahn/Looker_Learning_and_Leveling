@@ -149,6 +149,16 @@ view: customer_activities {
     sql: ${user_profile.user_id} ;;
   }
 
+  measure: distinct_activities {
+    type: count_distinct
+    sql: ${user_activity_id} ;;
+  }
+
+  measure: total_activity_rewards {
+    type: sum
+    sql: ${activity_reward} ;;
+  }
+
   measure: activity_completion_rate {
     type: number
     sql: COUNT(DISTINCT CASE WHEN ${activity_completion_ts_date} IS NOT NULL THEN ${user_activity_id} END)/

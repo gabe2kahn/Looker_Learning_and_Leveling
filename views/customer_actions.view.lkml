@@ -123,6 +123,21 @@ view: customer_actions {
     sql: ${user_profile.user_id} ;;
   }
 
+  measure: distinct_actions {
+    type: count_distinct
+    sql: ${user_action_id} ;;
+  }
+
+  measure: completed_actions {
+    type: count_distinct
+    sql: CASE WHEN ${action_completion_ts_raw} IS NOT NULL THEN ${user_action_id} END ;;
+  }
+
+  measure: total_action_rewards {
+    type: sum
+    sql: ${action_reward} ;;
+  }
+
   measure: action_completion_rate {
     type: number
     sql: COUNT(DISTINCT CASE WHEN ${action_completion_ts_date}} IS NOT NULL THEN ${user_action_id})/
