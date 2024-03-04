@@ -154,6 +154,11 @@ view: customer_activities {
     sql: ${user_activity_id} ;;
   }
 
+  measure: completed_activities {
+    type: count_distinct
+    sql: CASE WHEN ${activity_completion_ts_raw} IS NOT NULL THEN ${user_activity_id} END ;;
+  }
+
   measure: total_activity_rewards {
     type: sum
     sql: CASE WHEN ${activity_completion_ts_date} IS NOT NULL THEN ${activity_reward} END ;;
