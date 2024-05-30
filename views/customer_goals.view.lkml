@@ -1,8 +1,8 @@
-view: customer_actions {
-  sql_table_name: "LEARNING_SYSTEM"."CUSTOMER_ACTIONS"
+view: customer_goals {
+  sql_table_name: "LEARNING_SYSTEM"."CUSTOMER_GOALS"
     ;;
 
-  dimension_group: action_completion_ts {
+  dimension_group: goal_completion_ts {
     type: time
     timeframes: [
       raw,
@@ -13,10 +13,10 @@ view: customer_actions {
       quarter,
       year
     ]
-    sql: ${TABLE}."ACTION_COMPLETION_TS" ;;
+    sql: ${TABLE}."GOAL_COMPLETION_TS" ;;
   }
 
-  dimension_group: action_last_updated_ts {
+  dimension_group: goal_last_updated_ts {
     type: time
     timeframes: [
       raw,
@@ -27,10 +27,10 @@ view: customer_actions {
       quarter,
       year
     ]
-    sql: ${TABLE}."ACTION_LAST_UPDATED_TS" ;;
+    sql: ${TABLE}."GOAL_LAST_UPDATED_TS" ;;
   }
 
-  dimension: action_name {
+  dimension: goal_name {
     type: string
     sql: CASE
       WHEN ${TABLE}."ACTION_NAME" IN ('Make 2nd consecutive, on-time, minimum payment',
@@ -39,22 +39,27 @@ view: customer_actions {
       WHEN ${TABLE}."ACTION_NAME" IN ('Pay $100 off your balance','Pay off $100') THEN 'Pay $100 off your balance'
       WHEN ${TABLE}."ACTION_NAME" IN ('Make 3rd consecutive, on-time, minimum statement payment',
         'Make 3rd consecutive, on-time, minimum payment') THEN 'Make 3rd consecutive, on-time, minimum payment'
-      ELSE ${TABLE}."ACTION_NAME"
+      ELSE ${TABLE}."GOAL_NAME"
       END ;;
   }
 
-  dimension: action_required_ind {
+  dimension: goal_required_ind {
     type: yesno
-    sql: ${TABLE}."ACTION_REQUIRED_IND" ;;
+    sql: ${TABLE}."GOAL_REQUIRED_IND" ;;
   }
 
-  dimension: action_reward {
+  dimension: goal_reward {
     type: number
-    sql: ${TABLE}."ACTION_REWARD" ;;
+    sql: ${TABLE}."GOAL_REWARD" ;;
     value_format_name: usd
   }
 
-  dimension_group: action_created_ts {
+  dimension: goal_type {
+    type: string
+    sql: ${TABLE}."GOAL_TYPE" ;;
+  }
+
+  dimension_group: goal_created_ts {
     type: time
     timeframes: [
       raw,
@@ -65,7 +70,7 @@ view: customer_actions {
       quarter,
       year
     ]
-    sql: ${TABLE}."ACTION_CREATED_TS" ;;
+    sql: ${TABLE}."GOAL_CREATED_TS" ;;
   }
 
   dimension: customer_learning_system_id {
@@ -74,7 +79,7 @@ view: customer_actions {
   }
 
   dimension: grow_version {
-    type: number
+    type: string
     sql: ${TABLE}."GROW_VERSION" ;;
   }
 
@@ -107,10 +112,25 @@ view: customer_actions {
     sql: ${TABLE}."LEVEL_VERSION" ;;
   }
 
-  dimension: user_action_id {
+  dimension: goal_progress_completed {
+    type: number
+    sql: ${TABLE}."PROGRESS_COMPLETED" ;;
+  }
+
+  dimension: goal_progress_pending {
+    type: number
+    sql: ${TABLE}."PROGRESS_PENDING" ;;
+  }
+
+  dimension: goal_requirement {
+    type: number
+    sql: ${TABLE}."REQUIREMENT" ;;
+  }
+
+  dimension: user_goal_id {
     type: string
     primary_key: yes
-    sql: ${TABLE}."USER_ACTION_ID" ;;
+    sql: COALESCE(${TABLE}."NEW_GROW_GOAL_ID",${TABLE}."OLD_GROW_GOAL_ID") ;;
   }
 
   dimension: user_id {
@@ -125,60 +145,60 @@ view: customer_actions {
 
   measure: distinct_actions {
     type: count_distinct
-    sql: ${user_action_id} ;;
+    sql: ${user_goal_id} ;;
   }
 
   measure: completed_actions {
     type: count_distinct
-    sql: CASE WHEN ${action_completion_ts_raw} IS NOT NULL THEN ${user_action_id} END ;;
+    sql: CASE WHEN ${goal_completion_ts_raw} IS NOT NULL THEN ${user_goal_id} END ;;
   }
 
-  measure: total_action_rewards {
+  measure: total_goal_rewards {
     type: sum
-    sql: CASE WHEN ${action_completion_ts_date} IS NOT NULL THEN ${action_reward} END ;;
+    sql: CASE WHEN ${goal_completion_ts_raw} IS NOT NULL THEN ${goal_reward} END ;;
     value_format_name: usd_0
   }
 
-  measure: action_completion_rate {
+  measure: goal_completion_rate {
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${action_completion_ts_date}} IS NOT NULL THEN ${user_action_id})/
-      COUNT(DISTINCT ${user_action_id});;
+    sql: COUNT(DISTINCT CASE WHEN ${goal_completion_ts_date}} IS NOT NULL THEN ${user_goal_id})/
+      COUNT(DISTINCT ${user_goal_id});;
     value_format_name: percent_2
   }
 
-  measure: actions_completed_within_30d {
+  measure: goals_completed_within_30d {
     type: count_distinct
-    sql: CASE WHEN ${action_completion_ts_date} between ${customer_levels.level_started_ts_date}
+    sql: CASE WHEN ${goal_completion_ts_date} between ${customer_levels.level_started_ts_date}
       AND DATEADD(days,30,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
   }
 
-  measure: actions_completed_within_60d {
+  measure: goals_completed_within_60d {
     type: count_distinct
-    sql: CASE WHEN ${action_completion_ts_date} between ${customer_levels.level_started_ts_date}
+    sql: CASE WHEN ${goal_completion_ts_date} between ${customer_levels.level_started_ts_date}
       AND DATEADD(days,60,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
   }
 
-  measure: actions_completed_within_90d {
+  measure: goals_completed_within_90d {
     type: count_distinct
-    sql: CASE WHEN ${action_completion_ts_date} between ${customer_levels.level_started_ts_date}
+    sql: CASE WHEN ${goal_completion_ts_date} between ${customer_levels.level_started_ts_date}
       AND DATEADD(days,90,${customer_levels.level_started_ts_date}) THEN ${user_id} END ;;
   }
 
-  measure: action_completion_rate_30d {
+  measure: goal_completion_rate_30d {
     type: number
-    sql: ${actions_completed_within_30d} / COUNT(DISTINCT ${user_action_id});;
+    sql: ${goals_completed_within_30d} / COUNT(DISTINCT ${user_goal_id});;
     value_format_name: percent_1
   }
 
-  measure: action_completion_rate_60d {
+  measure: goal_completion_rate_60d {
     type: number
-    sql: ${actions_completed_within_60d} / COUNT(DISTINCT ${user_action_id});;
+    sql: ${goals_completed_within_60d} / COUNT(DISTINCT ${user_goal_id});;
     value_format_name: percent_1
   }
 
-  measure: action_completion_rate_90d {
+  measure: goal_completion_rate_90d {
     type: number
-    sql: ${actions_completed_within_90d} / COUNT(DISTINCT ${user_action_id});;
+    sql: ${goals_completed_within_90d} / COUNT(DISTINCT ${user_goal_id});;
     value_format_name: percent_1
   }
 }

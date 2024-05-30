@@ -1,8 +1,8 @@
-view: customer_activities_detailed {
-  sql_table_name: "LEARNING_SYSTEM"."CUSTOMER_ACTIVITIES_DETAILED"
+view: customer_lessons_detailed {
+  sql_table_name: "LEARNING_SYSTEM"."CUSTOMER_LESSONS_DETAILED"
     ;;
 
-  dimension_group: activity_last_updated_ts {
+  dimension_group: lesson_last_updated_ts {
     type: time
     timeframes: [
       raw,
@@ -13,12 +13,12 @@ view: customer_activities_detailed {
       quarter,
       year
     ]
-    sql: ${TABLE}."ACTIVITY_LAST_UPDATED_TS" ;;
+    sql: ${TABLE}."LESSON_LAST_UPDATED_TS" ;;
   }
 
-  dimension: activity_name {
+  dimension: lesson_name {
     type: string
-    sql: ${TABLE}."ACTIVITY_NAME" ;;
+    sql: ${TABLE}."LESSON_NAME" ;;
   }
 
   dimension: customer_answer {
@@ -108,9 +108,9 @@ view: customer_activities_detailed {
     sql: ${TABLE}."SCREEN_WORD_COUNT" ;;
   }
 
-  dimension: user_activity_id {
+  dimension: user_lesson_id {
     type: string
-    sql: ${TABLE}."USER_ACTIVITY_ID" ;;
+    sql: ${TABLE}."USER_lesson_ID" ;;
   }
 
   dimension: user_screen_id {

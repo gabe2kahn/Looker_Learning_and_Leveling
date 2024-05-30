@@ -11,24 +11,24 @@ persist_with: learning_and_leveling_default_datagroup
 
 label: "Arro Learning and Leveling Monitoring"
 
-explore: customer_actions {
+explore: customer_goals {
   join: user_profile {
     type: inner
-    sql_on: ${customer_actions.user_id} = ${user_profile.user_id} ;;
+    sql_on: ${customer_goals.user_id} = ${user_profile.user_id} ;;
     relationship: many_to_one
   }
 
   join: customer_levels {
     type: inner
-    sql_on: ${customer_levels.user_id} = ${customer_actions.user_id}
-      AND ${customer_levels.level_name} = ${customer_actions.level_name};;
+    sql_on: ${customer_levels.user_id} = ${customer_goals.user_id}
+      AND ${customer_levels.level_name} = ${customer_goals.level_name};;
     relationship: many_to_many
   }
 
-  join: customer_activities {
+  join: customer_lessons {
     type: inner
-    sql_on: ${customer_actions.user_id} = ${customer_activities.user_id}
-      AND ${customer_actions.level_name} = ${customer_activities.level_name};;
+    sql_on: ${customer_goals.user_id} = ${customer_lessons.user_id}
+      AND ${customer_goals.level_name} = ${customer_lessons.level_name};;
     relationship: many_to_many
   }
 
@@ -37,31 +37,31 @@ explore: customer_actions {
   }
 }
 
-explore: customer_activities {
+explore: customer_lessons {
   join: user_profile {
     type: inner
-    sql_on: ${customer_activities.user_id} = ${user_profile.user_id} ;;
+    sql_on: ${customer_lessons.user_id} = ${user_profile.user_id} ;;
     relationship: many_to_one
   }
 
-  join: customer_activities_detailed {
+  join: customer_lessons_detailed {
     type: inner
-    sql_on: ${customer_activities.user_id} = ${customer_activities_detailed.user_id}
-      AND ${customer_activities.user_activity_id} = ${customer_activities_detailed.user_activity_id};;
+    sql_on: ${customer_lessons.user_id} = ${customer_lessons_detailed.user_id}
+      AND ${customer_lessons.user_lesson_id} = ${customer_lessons_detailed.user_lesson_id};;
     relationship: many_to_many
   }
 
   join: customer_levels {
     type: inner
-    sql_on: ${customer_levels.user_id} = ${customer_activities.user_id}
-      AND ${customer_levels.level_name} = ${customer_activities.level_name};;
+    sql_on: ${customer_levels.user_id} = ${customer_lessons.user_id}
+      AND ${customer_levels.level_name} = ${customer_lessons.level_name};;
     relationship: many_to_many
   }
 
-  join: customer_actions {
+  join: customer_goals {
     type: inner
-    sql_on: ${customer_activities.user_id} = ${customer_actions.user_id}
-      AND ${customer_activities.level_name} = ${customer_actions.level_name};;
+    sql_on: ${customer_lessons.user_id} = ${customer_goals.user_id}
+      AND ${customer_lessons.level_name} = ${customer_goals.level_name};;
     relationship: many_to_many
   }
 
@@ -70,10 +70,10 @@ explore: customer_activities {
   }
 }
 
-explore: customer_activities_detailed {
+explore: customer_lessons_detailed {
   join: user_profile {
     type: inner
-    sql_on: ${customer_activities_detailed.user_id} = ${user_profile.user_id} ;;
+    sql_on: ${customer_lessons_detailed.user_id} = ${user_profile.user_id} ;;
     relationship: many_to_one
   }
 
@@ -89,24 +89,31 @@ explore: customer_levels {
     relationship: many_to_one
   }
 
-  join: customer_activities {
+  join: customer_lessons {
     type: inner
-    sql_on: ${customer_levels.user_id} = ${customer_activities.user_id}
-      AND ${customer_levels.level_name} = ${customer_activities.level_name};;
+    sql_on: ${customer_levels.user_id} = ${customer_lessons.user_id}
+      AND ${customer_levels.level_name} = ${customer_lessons.level_name};;
     relationship: many_to_many
   }
 
-  join: customer_activities_detailed {
+  join: customer_lessons_detailed {
     type: inner
-    sql_on: ${customer_activities.user_id} = ${customer_activities_detailed.user_id}
-      AND ${customer_activities.user_activity_id} = ${customer_activities_detailed.user_activity_id};;
+    sql_on: ${customer_lessons.user_id} = ${customer_lessons_detailed.user_id}
+      AND ${customer_lessons.user_lesson_id} = ${customer_lessons_detailed.user_lesson_id};;
     relationship: many_to_many
   }
 
-  join: customer_actions {
+  join: customer_goals {
     type: inner
-    sql_on: ${customer_levels.user_id} = ${customer_actions.user_id}
-      AND ${customer_levels.level_name} = ${customer_actions.level_name};;
+    sql_on: ${customer_levels.user_id} = ${customer_goals.user_id}
+      AND ${customer_levels.level_name} = ${customer_goals.level_name};;
+    relationship: many_to_many
+  }
+
+  join: snapshot_pt {
+    type: inner
+    sql_on: ${customer_levels.user_id} = ${snapshot_pt.user_id}
+      AND ${snapshot_pt.snap_date} >= ${customer_levels.level_started_ts_date};;
     relationship: many_to_many
   }
 

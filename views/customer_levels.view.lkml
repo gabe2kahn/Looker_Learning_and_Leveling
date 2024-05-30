@@ -8,18 +8,13 @@ view: customer_levels {
     value_format_name: percent_2
   }
 
-  dimension: customer_learning_system_id {
-    type: string
-    sql: ${TABLE}."CUSTOMER_LEARNING_SYSTEM_ID" ;;
-  }
-
   dimension: free_months_reward {
     type: number
     sql: ${TABLE}."FREE_MONTHS_REWARD" ;;
   }
 
   dimension: grow_version {
-    type: number
+    type: string
     sql: ${TABLE}."GROW_VERSION" ;;
   }
 
@@ -53,7 +48,7 @@ view: customer_levels {
 
   dimension: level_id {
     type: string
-    sql: ${TABLE}."LEVEL_ID" ;;
+    sql: COALESCE(${TABLE}."NEW_GROW_LEVEL_ID",${TABLE}."OLD_GROW_LEVEL_ID") ;;
   }
 
   dimension_group: level_last_updated_ts {
@@ -91,7 +86,12 @@ view: customer_levels {
 
   dimension: level_version {
     type: string
-    sql: ${TABLE}."LEVEL_VERSION" ;;
+    sql: COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") ;;
+  }
+
+  dimension: time_in_level {
+    type: string
+    sql: DATEDIFF(days,${level_started_ts_date},current_date) ;;
   }
 
   dimension: user_id {
@@ -102,7 +102,7 @@ view: customer_levels {
   dimension: user_level_id {
     type: string
     primary_key: yes
-    sql: ${TABLE}."USER_LEVEL_ID" ;;
+    sql: COALESCE(${TABLE}."NEW_GROW_USER_LEVEL_ID",${TABLE}."OLD_GROW_USER_LEVEL_ID") ;;
   }
 
   measure: users {
@@ -159,7 +159,7 @@ view: customer_levels {
 
   measure: total_rewards {
     type: number
-    sql: ${customer_actions.total_action_rewards} + ${customer_activities.total_activity_rewards} ;;
+    sql: ${customer_goals.total_goal_rewards} + ${customer_lessons.total_lesson_rewards} ;;
     value_format_name: usd_0
   }
 }
