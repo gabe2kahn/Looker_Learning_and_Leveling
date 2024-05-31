@@ -206,6 +206,12 @@ view: snapshot_pt {
     type: number
     sql: ${TABLE}."SUCCESSFUL_PAYMENT_VOLUME" ;;
   }
+
+  dimension: time_in_level {
+    type: string
+    sql: DATEDIFF(days,${customer_levels.level_started_ts_date},${snap_date}) ;;
+  }
+
   dimension: total_delinq_balance {
     type: number
     sql: ${TABLE}."TOTAL_DELINQ_BALANCE" ;;
@@ -218,7 +224,277 @@ view: snapshot_pt {
     type: string
     sql: ${TABLE}."USER_ID" ;;
   }
-  measure: count {
-    type: count
+
+  measure: users {
+    type: count_distinct
+    sql: ${user_id} ;;
+  }
+
+  measure: policy_20230929_approved_users {
+    type: count_distinct
+    sql: CASE WHEN ${user_profile.policy_20230929_approval_ind} = 'Approved' THEN ${user_id} END ;;
+  }
+
+  measure: policy_20240117_approved_users {
+    type: count_distinct
+    sql: CASE WHEN ${user_profile.policy_20240117_approval_ind} = 'Approved' THEN ${user_id} END ;;
+  }
+
+  measure: open_users {
+    type: count_distinct
+    sql: CASE WHEN ${account_closed_date} IS NULL and ${chargeoff_date} IS NULL THEN ${user_id} END;;
+  }
+
+  measure: overdue_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${chargeoff_date} IS NULL
+      THEN ${user_id}
+    END ;;
+  }
+
+  measure: dq30plus_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${days_overdue} >= 30
+        and ${chargeoff_date} IS NULL
+      THEN ${user_id}
+    END ;;
+  }
+
+  measure: dq60plus_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${days_overdue} >= 60
+        and ${chargeoff_date} IS NULL
+      THEN ${user_id}
+    END ;;
+  }
+
+  measure: dq30_59_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${days_overdue} between 30 and 59
+        and ${chargeoff_date} IS NULL
+      THEN ${user_id}
+    END ;;
+  }
+
+  measure: policy_20230929_approved_overdue_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${chargeoff_date} IS NULL
+        AND ${user_profile.policy_20230929_approval_ind} = 'Approved'
+      THEN ${user_id}
+    END ;;
+  }
+
+  measure: policy_20240117_approved_overdue_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${chargeoff_date} IS NULL
+        AND ${user_profile.policy_20240117_approval_ind} = 'Approved'
+      THEN ${user_id}
+    END ;;
+  }
+
+  measure: overdue_balance {
+    type: sum
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+    END ;;
+  }
+
+  measure: dq30plus_balance {
+    type: sum
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${days_overdue} >= 30
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+      END ;;
+  }
+
+  measure: policy_20230929_approved_overdue_balance {
+    type: sum
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        AND ${user_profile.policy_20230929_approval_ind} = 'Approved'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+    END ;;
+  }
+
+  measure: policy_20230929_approved_dq30plus_balance {
+    type: sum
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${days_overdue} >= 30
+        AND ${user_profile.policy_20230929_approval_ind} = 'Approved'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance} END ;;
+  }
+
+  measure: policy_20240117_approved_overdue_balance {
+    type: sum
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        AND ${user_profile.policy_20240117_approval_ind} = 'Approved'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+    END ;;
+  }
+
+  measure: policy_20240117_approved_dq30plus_balance {
+    type: sum
+    sql: CASE
+      WHEN ${overdue_ind} = 'True'
+        and ${days_overdue} >= 30
+        AND ${user_profile.policy_20240117_approval_ind} = 'Approved'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+    END ;;
+  }
+
+  measure: overdue_rate {
+    type: number
+    sql: ${overdue_users} / NULLIF(${users},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: dq30plus_rate {
+    type: number
+    sql: ${dq30plus_users} / NULLIF(${users},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: dq60plus_rate {
+    type: number
+    sql: ${dq60plus_users} / NULLIF(${users},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: dq30_59_rate {
+    type: number
+    sql: ${dq30_59_users} / NULLIF(${users},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: policy_20230929_approved_overdue_rate {
+    type: number
+    sql: ${policy_20230929_approved_overdue_users} / NULLIF(${policy_20230929_approved_users},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: policy_20240117_approved_overdue_rate {
+    type: number
+    sql: ${policy_20240117_approved_overdue_users} / NULLIF(${policy_20240117_approved_users},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: overdue_dollar_rate {
+    type: number
+    sql: ${overdue_balance} / NULLIF(${total_outstandings},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: dq30plus_dollar_rate {
+    type: number
+    sql: ${dq30plus_balance} / NULLIF(${total_outstandings},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: policy_20230929_approved_overdue_dollar_rate {
+    type: number
+    sql: ${policy_20230929_approved_overdue_balance} / NULLIF(${policy_20230929_approved_total_outstandings},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: policy_20230929_approved_dq30plus_dollar_rate {
+    type: number
+    sql: ${policy_20230929_approved_dq30plus_balance} / NULLIF(${policy_20230929_approved_total_outstandings},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: policy_20240117_approved_overdue_dollar_rate {
+    type: number
+    sql: ${policy_20240117_approved_overdue_balance} / NULLIF(${policy_20240117_approved_total_outstandings},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: policy_20240117_approved_dq30plus_dollar_rate {
+    type: number
+    sql: ${policy_20240117_approved_dq30plus_balance} / NULLIF(${policy_20240117_approved_total_outstandings},0) ;;
+    value_format_name: percent_1
+  }
+
+  measure: total_outstandings {
+    type: sum
+    sql: CASE WHEN ${chargeoff_date} IS NULL THEN ${outstanding_balance} END;;
+    value_format_name: usd
+  }
+
+  measure: policy_20230929_approved_total_outstandings {
+    type: sum
+    sql: CASE
+      WHEN ${user_profile.policy_20230929_approval_ind} = 'Approved'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+    END ;;
+    value_format_name: usd
+  }
+
+  measure: policy_20240117_approved_total_outstandings {
+    type: sum
+    sql: CASE
+      WHEN ${user_profile.policy_20240117_approval_ind} = 'Approved'
+        and ${chargeoff_date} IS NULL
+      THEN ${outstanding_balance}
+    END ;;
+    value_format_name: usd
+  }
+
+  measure: total_exposure {
+    type: sum
+    sql: CASE
+      WHEN ${account_closed_date} IS NULL
+        and ${chargeoff_date} IS NULL
+      THEN ${current_credit_limit}
+    END;;
+    value_format_name: usd_0
+  }
+
+  measure: average_credit_limit {
+    type: average
+    sql: CASE
+      WHEN ${account_closed_date} IS NULL
+        and ${chargeoff_date} IS NULL
+      THEN ${current_credit_limit}
+    END ;;
+    value_format_name: usd_0
+  }
+
+  measure: average_utilization {
+    type: average
+    sql: ${credit_utilization};;
+    value_format_name: percent_1
+  }
+
+  measure: average_purchase_volume {
+    type: average
+    sql: CASE
+      WHEN ${account_closed_date} IS NULL
+        and ${chargeoff_date} IS NULL
+      THEN ${purchase_volume}
+    END;;
+    value_format_name: usd
   }
 }
