@@ -19,6 +19,12 @@ view: snapshot_pt {
     type: string
     sql: ${TABLE}."ACTIVE_LEVEL" ;;
   }
+
+  dimension: active_level_version {
+    type: string
+    sql: ${TABLE}."ACTIVE_LEVEL_VERSION" ;;
+  }
+
   dimension: autopay_on_ind {
     type: yesno
     sql: ${TABLE}."AUTOPAY_ON_IND" ;;
