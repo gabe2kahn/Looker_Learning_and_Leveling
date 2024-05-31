@@ -1,5 +1,5 @@
 view: snapshot_pt {
-  sql_table_name: "CUSTOMER"."SNAPSHOT_PT" ;;
+  sql_table_name: "CREDIT"."CUSTOMER"."SNAPSHOT_PT" ;;
 
   dimension_group: account_closed {
     type: time

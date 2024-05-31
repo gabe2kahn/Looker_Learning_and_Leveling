@@ -1,5 +1,5 @@
 view: user_profile {
-  sql_table_name: "CUSTOMER"."USER_PROFILE" ;;
+  sql_table_name: "CREDIT"."CUSTOMER"."USER_PROFILE" ;;
 
   dimension: account_age {
     type: number
