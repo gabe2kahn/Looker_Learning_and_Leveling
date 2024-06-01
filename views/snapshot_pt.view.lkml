@@ -509,4 +509,20 @@ view: snapshot_pt {
     END;;
     value_format_name: usd
   }
+
+  measure: leveled_up_users {
+    type: count_distinct
+    sql: CASE
+      WHEN ${customer_levels.level_name} = 'Bronze' AND ${active_level} IN ('Silver','Gold','Platinum') THEN ${user_id}
+      WHEN ${customer_levels.level_name} = 'Silver' AND ${active_level} IN ('Gold','Platinum') THEN ${user_id}
+      WHEN ${customer_levels.level_name} = 'Gold' AND ${active_level} IN ('Platinum') THEN ${user_id}
+    END ;;
+  }
+
+  measure: level_up_rate {
+    type: number
+    sql: ${leveled_up_users} / ${open_users} ;;
+    value_format_name: percent_1
+  }
+
 }
