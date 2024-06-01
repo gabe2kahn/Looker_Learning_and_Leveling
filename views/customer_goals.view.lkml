@@ -172,7 +172,7 @@ view: customer_goals {
     type: number
     sql: COUNT(DISTINCT CASE WHEN ${goal_completion_ts_date} IS NOT NULL THEN ${user_goal_id} END)/
       COUNT(DISTINCT ${customer_levels.user_level_id});;
-    value_format_name: percent_2
+    value_format_name: percent_1
   }
 
   measure: goals_completed_within_30d {
