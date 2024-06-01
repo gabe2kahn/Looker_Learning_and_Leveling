@@ -214,7 +214,7 @@ view: snapshot_pt {
   }
 
   dimension: time_in_level {
-    type: string
+    type: number
     sql: DATEDIFF(days,${customer_levels.level_started_ts_date},${snap_date}) ;;
   }
 
