@@ -89,6 +89,11 @@ view: customer_levels {
     sql: COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") ;;
   }
 
+  dimension: time_since_level_up {
+    type: string
+    sql: DATEDIFF(DAYS,${level_started_ts_date}, current_date) ;;
+  }
+
   dimension: user_id {
     type: string
     sql: ${TABLE}."USER_ID" ;;
