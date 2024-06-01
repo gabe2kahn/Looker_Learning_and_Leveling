@@ -105,6 +105,16 @@ view: customer_levels {
     sql: ${user_profile.user_id} ;;
   }
 
+  measure: users_leveled_up {
+    type: count_distinct
+    sql: CASE WHEN ${level_completion_ts_date} IS NOT NULL THEN ${user_profile.user_id} END ;;
+  }
+
+  measure: level_up_rate {
+    type: number
+    sql: ${users_leveled_up} / ${users} ;;
+  }
+
   measure: average_time_to_level_up{
     type: average
     sql: DATEDIFF(DAYS, ${level_started_ts_date},${level_completion_ts_date}) ;;
