@@ -93,13 +93,13 @@ explore: customer_levels {
     type: inner
     sql_on: ${customer_levels.level_name} = ${goal_names.level_name}
       AND ${customer_levels.level_version} = ${goal_names.level_version} ;;
-    relationship: many_to_one
+    relationship: many_to_many
   }
 
   join: lesson_names {
     type: inner
     sql_on: ${customer_levels.level_name} = ${goal_names.level_name} ;;
-    relationship: many_to_one
+    relationship: many_to_many
   }
 
   join: customer_lessons {
@@ -121,7 +121,7 @@ explore: customer_levels {
     type: inner
     sql_on: ${customer_levels.user_id} = ${customer_goals.user_id}
       AND ${customer_levels.level_name} = ${customer_goals.level_name}
-      ${goal_names.goal_name} = ${customer_goals.goal_name} ;;
+      AND ${goal_names.goal_name} = ${customer_goals.goal_name} ;;
     relationship: many_to_many
   }
 
