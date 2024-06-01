@@ -118,7 +118,7 @@ explore: customer_levels {
   }
 
   join: customer_goals {
-    type: inner
+    type: left_outer
     sql_on: ${customer_levels.user_id} = ${customer_goals.user_id}
       AND ${customer_levels.level_name} = ${customer_goals.level_name}
       AND ${goal_names.goal_name} = ${customer_goals.goal_name} ;;
