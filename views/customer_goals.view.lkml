@@ -39,6 +39,10 @@ view: customer_goals {
       WHEN ${TABLE}."GOAL_NAME" IN ('Pay $100 off your balance','Pay off $100') THEN 'Pay $100 off your balance'
       WHEN ${TABLE}."GOAL_NAME" IN ('Make 3rd consecutive, on-time, minimum statement payment',
         'Make 3rd consecutive, on-time, minimum payment') THEN 'Make 3rd consecutive, on-time, minimum payment'
+      WHEN ${TABLE}."GOAL_NAME" IN ('Pay off full statement balance (Gold)', 'Pay off full statement balance',
+        'Pay off 1st full statement (Gold, Hard)') THEN 'Pay off first full statement balance'
+      WHEN ${TABLE}."GOAL_NAME" IN ('Make 5 on-time minimum or greater statement payment (Gold, Streak, Easy)',
+        'Make 7 on-time minimum or greater statement payment (Gold, Streak)') THEN 'Gold Streak (5 Easy, 7 Hard)'
       ELSE ${TABLE}."GOAL_NAME"
       END ;;
   }
