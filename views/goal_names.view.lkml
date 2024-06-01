@@ -21,9 +21,9 @@ view: goal_names {
       WHEN ${goal_name} IN ('Make 5 on-time minimum or greater statement payment (Gold, Streak, Easy)',
         'Make 7 on-time minimum or greater statement payment (Gold, Streak)') THEN 'Gold Streak (5 Easy, 7 Hard)'
       WHEN ${goal_name} IN ('Pay off at least $200 since Gold was unlocked', 'Pay off at least $400',
-      'Pay off at least $500 since Gold was unlocked') THEN 'First Cum. Payment Goal ($200 Easy, $500 Hard, $400 Default)'
+      'Pay off at least $500 since Gold was unlocked') THEN '1st Cum. Payment Goal ($200 Easy, $500 Hard, $400 Default)'
       WHEN ${goal_name} IN ('Pay off at least $300 since Gold was unlocked', 'Pay off at least $500')
-        THEN 'Second Cum. Payment Goal ($300 Easy, $500 Default)'
+        THEN '2nd Cum. Payment Goal ($300 Easy, $500 Default)'
       ELSE ${goal_name}
       END ;;
   }
