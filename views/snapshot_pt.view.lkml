@@ -215,6 +215,12 @@ view: snapshot_pt {
 
   dimension: time_in_level {
     type: number
+    sql: CASE WHEN ${snap_date} <= ${customer_levels.level_completion_ts_date}
+    THEN DATEDIFF(days,${customer_levels.level_started_ts_date},${snap_date}) END ;;
+  }
+
+  dimension: time_since_level_up {
+    type: number
     sql: DATEDIFF(days,${customer_levels.level_started_ts_date},${snap_date}) ;;
   }
 
