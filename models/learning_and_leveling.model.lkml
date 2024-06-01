@@ -89,10 +89,24 @@ explore: customer_levels {
     relationship: many_to_one
   }
 
-  join: customer_lessons {
+  join: goal_names {
     type: inner
+    sql_on: ${customer_levels.level_name} = ${goal_names.level_name}
+      AND ${customer_levels.level_version} = ${goal_names.level_version} ;;
+    relationship: many_to_one
+  }
+
+  join: lesson_names {
+    type: inner
+    sql_on: ${customer_levels.level_name} = ${goal_names.level_name} ;;
+    relationship: many_to_one
+  }
+
+  join: customer_lessons {
+    type: left_outer
     sql_on: ${customer_levels.user_id} = ${customer_lessons.user_id}
-      AND ${customer_levels.level_name} = ${customer_lessons.level_name};;
+      AND ${customer_levels.level_name} = ${customer_lessons.level_name}
+      AND ${lesson_names.lesson_name} = ${customer_lessons.lesson_name} ;;
     relationship: many_to_many
   }
 
@@ -106,7 +120,8 @@ explore: customer_levels {
   join: customer_goals {
     type: inner
     sql_on: ${customer_levels.user_id} = ${customer_goals.user_id}
-      AND ${customer_levels.level_name} = ${customer_goals.level_name};;
+      AND ${customer_levels.level_name} = ${customer_goals.level_name}
+      ${goal_names.goal_name} = ${customer_goals.goal_name} ;;
     relationship: many_to_many
   }
 
