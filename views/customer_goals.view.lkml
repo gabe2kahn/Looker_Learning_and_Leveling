@@ -161,7 +161,7 @@ view: customer_goals {
 
   measure: goal_completion_rate {
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${goal_completion_ts_date}} IS NOT NULL THEN ${user_goal_id})/
+    sql: COUNT(DISTINCT CASE WHEN ${goal_completion_ts_date}} IS NOT NULL THEN ${user_goal_id} END)/
       COUNT(DISTINCT ${user_goal_id});;
     value_format_name: percent_2
   }
