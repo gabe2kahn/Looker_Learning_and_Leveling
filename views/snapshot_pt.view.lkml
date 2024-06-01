@@ -22,7 +22,7 @@ view: snapshot_pt {
 
   dimension: active_level_version {
     type: string
-    sql: ${TABLE}."ACTIVE_LEVEL_VERSION" ;;
+    sql: ${active_level}||' - '|| ${TABLE}."ACTIVE_LEVEL_VERSION" ;;
   }
 
   dimension: autopay_on_ind {
