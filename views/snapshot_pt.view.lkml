@@ -526,7 +526,7 @@ view: snapshot_pt {
 
   measure: level_up_rate {
     type: number
-    sql: ${leveled_up_users} / ${open_users} ;;
+    sql: ${leveled_up_users} / ${users} ;;
     value_format_name: percent_1
   }
 
