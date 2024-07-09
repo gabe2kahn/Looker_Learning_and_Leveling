@@ -27,6 +27,12 @@ view: customer_quizzes {
     primary_key: yes
     sql: ${TABLE}."QUIZ_ATTEMPT_ID" ;;
   }
+
+  dimension: quiz_lockout_user_ind {
+    type: yesno
+    sql: LEFT(user_id,1) IN (8,9) ;;
+  }
+
   dimension_group: quiz_finished_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
@@ -160,6 +166,16 @@ view: customer_quizzes {
     type: number
     sql: ${aced_most_recent_quiz_attempts} / ${most_recent_quiz_attempts} ;;
     value_format_name: percent_1
+  }
+
+  measure: average_attempts {
+    type: average
+    sql: CASE WHEN ${attempt_recency} = 1 THEN ${attempt_number} END ;;
+  }
+
+  measure: users_with_second_attempts {
+    type: count_distinct
+    sql: CASE WHEN ${attempt_number} = 2 THEN ${user_id} END ;;
   }
 
 }
