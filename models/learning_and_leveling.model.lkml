@@ -144,3 +144,19 @@ explore: financial_health_score {
     relationship: many_to_one
   }
 }
+
+explore: customer_quizzes {
+  join: user_profile {
+    type: inner
+    sql_on: ${customer_quizzes.user_id} = ${user_profile.user_id} ;;
+    relationship: many_to_one
+  }
+}
+
+explore: customer_quizzes_detailed {
+  join: user_profile {
+    type: inner
+    sql_on: ${customer_quizzes_detailed.user_id} = ${user_profile.user_id} ;;
+    relationship: many_to_one
+  }
+}
