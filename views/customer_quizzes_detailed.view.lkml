@@ -34,14 +34,21 @@ view: customer_quizzes_detailed {
     type: string
     sql: ${TABLE}."CORRECT_VALUES" ;;
   }
-  dimension_group: last_update_ts {
+  dimension_group: last_update {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}."LAST_UPDATE_TS" ;;
   }
+
+  dimension: ordering {
+    type: number
+    sql: ${TABLE}."ORDERING" ;;
+  }
+
   dimension: question {
     type: string
     sql: ${TABLE}."QUESTION" ;;
+    order_by_field: ordering
   }
   dimension: question_id {
     type: string
