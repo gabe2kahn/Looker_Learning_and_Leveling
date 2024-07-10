@@ -30,7 +30,7 @@ view: customer_quizzes {
 
   dimension: quiz_lockout_user_ind {
     type: yesno
-    sql: LEFT(user_id,1) IN (8,9) ;;
+    sql: LEFT(user_id,1) IN ('8','9') ;;
   }
 
   dimension_group: quiz_finished_ts {
