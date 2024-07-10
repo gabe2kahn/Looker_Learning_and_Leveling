@@ -50,6 +50,7 @@ view: customer_quizzes_detailed {
     sql: ${TABLE}."QUESTION" ;;
     order_by_field: ordering
   }
+
   dimension: question_id {
     type: string
     sql: ${TABLE}."QUESTION_ID" ;;
@@ -73,6 +74,12 @@ view: customer_quizzes_detailed {
     type: string
     sql: ${TABLE}."QUIZ_NAME" ;;
   }
+
+  dimension: quiz_question {
+    type: string
+    sql: ${quiz_name} ||' - '||${question};;
+  }
+
   dimension: user_id {
     type: string
     sql: ${TABLE}."USER_ID" ;;
