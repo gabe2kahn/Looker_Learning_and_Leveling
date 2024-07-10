@@ -66,6 +66,13 @@ view: customer_quizzes_detailed {
     type: string
     sql: ${TABLE}."QUIZ_ATTEMPT_ID" ;;
   }
+
+  dimension_group: quiz_finished {
+    type: time
+    timeframes: [raw, time, date, week, month, quarter, year]
+    sql: CAST(${TABLE}."QUIZ_FINISHED_TS" AS TIMESTAMP_NTZ) ;;
+  }
+
   dimension: quiz_id {
     type: string
     sql: ${TABLE}."QUIZ_ID" ;;
