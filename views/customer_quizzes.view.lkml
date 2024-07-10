@@ -197,4 +197,10 @@ view: customer_quizzes {
     sql: CASE WHEN ${attempt_number} = 2 THEN ${user_id} END ;;
   }
 
+  measure: second_attempt_rate {
+    type: number
+    sql: ${users_with_second_attempts}/${users} ;;
+    value_format_name: percent_1
+  }
+
 }
