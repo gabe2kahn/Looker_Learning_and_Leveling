@@ -176,20 +176,20 @@ view: customer_quizzes {
 
   measure: average_score {
     type: average
-    sql: ${quiz_score} ;;
-    value_format_name: decimal_1
+    sql: ${quiz_score}/100 ;;
+    value_format_name: percent_1
   }
 
   measure: average_first_attempt_score {
     type: average
-    sql: CASE WHEN ${attempt_number} = 1 THEN ${quiz_score} END ;;
-    value_format_name: decimal_1
+    sql: CASE WHEN ${attempt_number} = 1 THEN ${quiz_score}/100 END ;;
+    value_format_name: percent_1
   }
 
   measure: average_most_recent_attempt_score {
     type: average
-    sql: CASE WHEN ${attempt_recency} = 1 THEN ${quiz_score} END ;;
-    value_format_name: decimal_1
+    sql: CASE WHEN ${attempt_recency} = 1 THEN ${quiz_score}/100 END ;;
+    value_format_name: percent_1
   }
 
   measure: users_with_second_attempts {
