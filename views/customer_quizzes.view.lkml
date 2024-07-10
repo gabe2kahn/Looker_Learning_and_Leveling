@@ -168,9 +168,9 @@ view: customer_quizzes {
     value_format_name: percent_1
   }
 
-  measure: average_attempts {
-    type: average
-    sql: CASE WHEN ${attempt_recency} = 1 THEN ${attempt_number} END ;;
+  measure: median_attempts {
+    type: number
+    sql: MEDIAN(CASE WHEN ${attempt_recency} = 1 THEN ${attempt_number} END) ;;
     value_format_name: decimal_1
   }
 
@@ -186,7 +186,7 @@ view: customer_quizzes {
     value_format_name: percent_1
   }
 
-  measure: average_most_recent_attempt_score {
+  measure: median_most_recent_attempt_score {
     type: average
     sql: CASE WHEN ${attempt_recency} = 1 THEN ${quiz_score}/100 END ;;
     value_format_name: percent_1
