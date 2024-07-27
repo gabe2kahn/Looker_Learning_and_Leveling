@@ -106,4 +106,9 @@ view: user_lock_status_pt {
     type: count_distinct
     sql: ${user_id} ;;
   }
+
+  measure: max_users {
+    type: max
+    sql: ${user_id} ;;
+  }
 }
