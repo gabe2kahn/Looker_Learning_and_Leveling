@@ -86,8 +86,7 @@ view: user_lock_status_pt {
       WHEN ${failed_payment_ind} = True THEN 'Recent Failed Payment'
       WHEN ${broken_plaid_token_ind} = True THEN 'Broken Plaid Token'
       WHEN ${overdue_ind} = True THEN 'Overdue'
-    END
-    ;;
+    END ;;
   }
 
   dimension_group: snap {
