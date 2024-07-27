@@ -160,3 +160,11 @@ explore: customer_quizzes_detailed {
     relationship: many_to_one
   }
 }
+
+explore: user_lock_status_pt {
+  join: user_profile {
+    type: inner
+    sql_on: ${user_lock_status_pt.user_id} = ${user_profile.user_id} ;;
+    relationship: many_to_one
+  }
+}
