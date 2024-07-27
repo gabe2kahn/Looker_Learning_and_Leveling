@@ -22,8 +22,8 @@ view: user_lock_status_pt {
     sql: ${TABLE}."GLOBAL_OVERRIDE_IND" ;;
   }
   dimension: income_check_failed_ind {
-    type: yesno
-    sql: ${TABLE}."INCOME_CHECK_FAILED_IND" ;;
+    type: string
+    sql: CASE WHEN ${income_overide_ind} = True THEN False ELSE ${TABLE}."INCOME_CHECK_FAILED_IND" = True END ;;
   }
   dimension: income_overide_ind {
     type: yesno
@@ -64,6 +64,30 @@ view: user_lock_status_pt {
   dimension: primary_key {
     type: string
     sql: ${user_id}||${snap_date} ;;
+  }
+
+  dimension: restriction_reason {
+    type: string
+    sql: CASE
+      WHEN ${income_check_failed_ind} = False AND ${failed_payment_ind} = False AND ${broken_plaid_token_ind} = False AND ${overdue_ind} = False THEN 'Not Restricted'
+      WHEN ${global_override_ind} = True THEN 'Overwritten'
+      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Multiple'
+      WHEN ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${failed_payment_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Multiple'
+      WHEN ${income_check_failed_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
+      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Broken Plaid Token'
+      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True THEN 'Multiple'
+      WHEN ${income_check_failed_ind} = True THEN 'Income'
+      WHEN ${failed_payment_ind} = True THEN 'Recent Failed Payment'
+      WHEN ${broken_plaid_token_ind} = True THEN 'Broken Plaid Token'
+      WHEN ${overdue_ind} = True THEN 'Overdue'
+    END
+    ;;
   }
 
   dimension_group: snap {
