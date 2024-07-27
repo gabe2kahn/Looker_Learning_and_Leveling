@@ -39,6 +39,7 @@ view: user_lock_status_pt {
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: CAST(${TABLE}."LAST_UPDATE_TS" AS TIMESTAMP_NTZ) ;;
   }
+
   dimension: new_payment_pending_ind {
     type: yesno
     sql: ${TABLE}."NEW_PAYMENT_PENDING_IND" ;;
@@ -69,7 +70,6 @@ view: user_lock_status_pt {
   dimension: restriction_reason {
     type: string
     sql: CASE
-      WHEN ${income_check_failed_ind} = False AND ${failed_payment_ind} = False AND ${broken_plaid_token_ind} = False AND ${overdue_ind} = False THEN 'Not Restricted'
       WHEN ${global_override_ind} = True THEN 'Overwritten'
       WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
       WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
@@ -80,12 +80,13 @@ view: user_lock_status_pt {
       WHEN ${failed_payment_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
       WHEN ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Multiple'
       WHEN ${income_check_failed_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
-      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Broken Plaid Token'
+      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Broken Plaid'
       WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True THEN 'Multiple'
-      WHEN ${income_check_failed_ind} = True THEN 'Income'
-      WHEN ${failed_payment_ind} = True THEN 'Recent Failed Payment'
-      WHEN ${broken_plaid_token_ind} = True THEN 'Broken Plaid Token'
       WHEN ${overdue_ind} = True THEN 'Overdue'
+      WHEN ${failed_payment_ind} = True THEN 'Failed Payment'
+      WHEN ${broken_plaid_token_ind} = True THEN 'Broken Plaid Connection'
+      WHEN ${income_check_failed_ind} = True THEN 'Income'
+      WHEN ${income_check_failed_ind} = False AND ${failed_payment_ind} = False AND ${broken_plaid_token_ind} = False AND ${overdue_ind} = False THEN 'Never Locked'
     END ;;
   }
 
@@ -107,34 +108,4 @@ view: user_lock_status_pt {
     sql: ${user_id} ;;
   }
 
-  measure: most_severe_status {
-    type: string
-    sql: MAX(CASE
-      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True THEN 6
-      WHEN ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${broken_plaid_token_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${failed_payment_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True THEN 6
-      WHEN ${income_check_failed_ind} = True AND ${overdue_ind} = True THEN 6
-      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True THEN 3
-      WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True THEN 6
-      WHEN ${income_check_failed_ind} = True THEN 2
-      WHEN ${failed_payment_ind} = True THEN 4
-      WHEN ${broken_plaid_token_ind} = True THEN 3
-      WHEN ${overdue_ind} = True THEN 5
-      WHEN ${income_check_failed_ind} = False AND ${failed_payment_ind} = False AND ${broken_plaid_token_ind} = False AND ${overdue_ind} = False THEN 1
-      WHEN ${global_override_ind} = True THEN 1
-    END)
-      WHEN 6 THEN 'Multiple'
-      WHEN 5 THEN 'Overdue'
-      WHEN 4 THEN 'Failed Payment'
-      WHEN 3 THEN 'Broken Plaid'
-      WHEN 2 THEN 'Income'
-      WHEN 1 THEN 'Never Locked'
-    END
-      ;;
-  }
 }
