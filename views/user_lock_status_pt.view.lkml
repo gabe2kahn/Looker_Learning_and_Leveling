@@ -80,7 +80,7 @@ view: user_lock_status_pt {
       WHEN ${failed_payment_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
       WHEN ${failed_payment_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Multiple'
       WHEN ${income_check_failed_ind} = True AND ${overdue_ind} = True THEN 'Multiple'
-      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Broken Plaid'
+      WHEN ${income_check_failed_ind} = True AND ${broken_plaid_token_ind} = True THEN 'Broken Plaid Connection'
       WHEN ${income_check_failed_ind} = True AND ${failed_payment_ind} = True THEN 'Multiple'
       WHEN ${overdue_ind} = True THEN 'Overdue'
       WHEN ${failed_payment_ind} = True THEN 'Failed Payment'
