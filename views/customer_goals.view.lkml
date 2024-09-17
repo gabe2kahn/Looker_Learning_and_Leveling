@@ -195,19 +195,19 @@ view: customer_goals {
 
   measure: goal_completion_rate_30d {
     type: number
-    sql: ${goals_completed_within_30d} / COUNT(DISTINCT ${user_goal_id});;
+    sql: ${goals_completed_within_30d} / NULLIF(COUNT(DISTINCT ${user_goal_id}),0);;
     value_format_name: percent_1
   }
 
   measure: goal_completion_rate_60d {
     type: number
-    sql: ${goals_completed_within_60d} / COUNT(DISTINCT ${user_goal_id});;
+    sql: ${goals_completed_within_60d} / NULLIF(COUNT(DISTINCT ${user_goal_id}),0);;
     value_format_name: percent_1
   }
 
   measure: goal_completion_rate_90d {
     type: number
-    sql: ${goals_completed_within_90d} / COUNT(DISTINCT ${user_goal_id});;
+    sql: ${goals_completed_within_90d} / NULLIF(COUNT(DISTINCT ${user_goal_id}),0);;
     value_format_name: percent_1
   }
 }
