@@ -110,7 +110,7 @@ view: customer_lessons_detailed {
 
   dimension: user_lesson_id {
     type: string
-    sql: ${TABLE}."USER_lesson_ID" ;;
+    sql: ${TABLE}."USER_LESSON_ID" ;;
   }
 
   dimension: user_screen_id {
