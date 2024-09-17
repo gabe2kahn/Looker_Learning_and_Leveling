@@ -132,6 +132,12 @@ explore: customer_levels {
     relationship: many_to_many
   }
 
+  join: customer_level_history {
+    type: inner
+    sql_on: ${customer_levels.user_id} = ${customer_level_history.user_id} ;;
+    relationship: many_to_one
+  }
+
   always_filter: {
     filters: [user_profile.testing_stage: "Rollout"]
   }
