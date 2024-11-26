@@ -86,10 +86,18 @@ view: customer_levels {
 
   dimension: level_version {
     type: string
-    sql: COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") || CASE
-        WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
-        ELSE' - 2024-05-01'
-      END ;;
+    sql: CASE
+      WHEN COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") = 'Bronze' THEN
+        COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") || CASE
+          WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
+          ELSE' - 2024-04-01'
+        END
+      ELSE COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") || CASE
+          WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
+          ELSE' - 2024-05-01'
+        END
+      END
+      ;;
   }
 
   dimension: new_grow_score_version {
