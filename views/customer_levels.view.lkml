@@ -87,7 +87,7 @@ view: customer_levels {
   dimension: level_version {
     type: string
     sql: CASE
-      WHEN level_name = 'Bronze' THEN
+      WHEN ${level_name} = 'Bronze' THEN
         COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") || CASE
           WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
           ELSE' - 2024-04-01'
