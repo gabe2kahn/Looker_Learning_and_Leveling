@@ -90,11 +90,18 @@ view: customer_levels {
       WHEN ${level_name} = 'Bronze' THEN
         COALESCE(${new_grow_level_version},${old_grow_level_version}) || CASE
           WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
-          ELSE' - 2024-04-01'
+          ELSE ' - 2024-04-01'
+        END
+      WHEN ${level_name} = 'Silver' THEN
+        COALESCE(${new_grow_level_version},${old_grow_level_version}) || CASE
+          WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
+          WHEN ${new_grow_level_version} = 'HARDEST20240820' THEN ' - 2024-08-16'
+          WHEN ${new_grow_level_version} ilike '%20240501%' THEN ' - 2024-05-01'
+          ELSE ' - 2024-04-01'
         END
       ELSE COALESCE(${new_grow_level_version},${old_grow_level_version}) || CASE
           WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
-          ELSE' - 2024-05-01'
+          ELSE ' - 2024-05-01'
         END
       END
       ;;
