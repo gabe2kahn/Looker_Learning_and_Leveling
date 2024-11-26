@@ -88,11 +88,11 @@ view: customer_levels {
     type: string
     sql: CASE
       WHEN ${level_name} = 'Bronze' THEN
-        COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") || CASE
+        COALESCE(${new_grow_level_version},${old_grow_level_version}) || CASE
           WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
           ELSE' - 2024-04-01'
         END
-      ELSE COALESCE(${TABLE}."NEW_GROW_LEVEL_VERSION",${TABLE}."OLD_GROW_LEVEL_VERSION") || CASE
+      ELSE COALESCE(${new_grow_level_version},${old_grow_level_version}) || CASE
           WHEN try_to_date(new_grow_score_version) IS NOT NULL THEN ' - '|| ${new_grow_score_version}
           ELSE' - 2024-05-01'
         END
@@ -100,9 +100,19 @@ view: customer_levels {
       ;;
   }
 
+  dimension: new_grow_level_version {
+    type: string
+    sql: ${TABLE}."NEW_GROW_LEVEL_VERSION" ;;
+  }
+
   dimension: new_grow_score_version {
     type: string
     sql: ${TABLE}."NEW_GROW_SCORE_VERSION" ;;
+  }
+
+  dimension: old_grow_level_version {
+    type: string
+    sql: ${TABLE}."OLD_GROW_LEVEL_VERSION" ;;
   }
 
   dimension: time_since_level_up {

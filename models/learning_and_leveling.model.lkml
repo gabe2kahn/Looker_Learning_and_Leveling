@@ -92,7 +92,7 @@ explore: customer_levels {
   join: goal_names {
     type: inner
     sql_on: ${customer_levels.level_name} = ${goal_names.level_name}
-      AND ${customer_levels.level_version} = ${goal_names.level_version} ;;
+      AND COALESCE(${customer_levels.new_grow_level_version},${customer_levels.old_grow_level_version}) = ${goal_names.level_version} ;;
     relationship: many_to_many
   }
 
