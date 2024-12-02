@@ -22,7 +22,11 @@ view: user_profile {
 
   dimension: appsflyer_attribution_source {
     type: string
-    sql: ${TABLE}."APPSFLYER_ATTRIBUTION_SOURCE" ;;
+    sql: CASE
+      WHEN ${TABLE}."APPSFLYER_ATTRIBUTION_SOURCE" IN ('Homepage CTA Button', 'af_banner') THEN 'Arro Website'
+      WHEN COALESCE(${TABLE}."APPSFLYER_ATTRIBUTION_SOURCE",'organic') IN ('Organic', 'organic') THEN 'Organic'
+      ELSE ${TABLE}."APPSFLYER_ATTRIBUTION_SOURCE"
+    END ;;
   }
 
   dimension: arro_risk_model_1_score {
